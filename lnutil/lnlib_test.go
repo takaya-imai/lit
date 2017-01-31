@@ -1,19 +1,20 @@
 package lnutil
 
-// Nothing to do unit-test for CommitScript and FundTxOut
-// Because they depend on just other libraries and functions as follows.
-// * github.com/btcsuite/btcd/txscript
-// * github.com/btcsuite/btcd/wire
-// * lnutil.P2WSHify
-// It should test the other libraries and functions.
-
 import (
 	"testing"
 )
 
-// FundTxScript almost depends on github.com/btcsuite/btcd/txscript
-// So it needs tests for just swapped value
 //
+// CommitScript
+//
+// Test for s
+func TestScriptInCommitScript(t *testing.T) {
+}
+
+//
+// FundTxScript
+//
+// Test for swapped value
 // Define a test pubkey as testPub
 // A testAPub is the same as testPub
 // A testBPub is almost the same as testPub
@@ -50,4 +51,19 @@ func TestSwappedInFundTxScript(t *testing.T) {
 	if swapped_same != false {
 		t.Fatalf("wrong swapped value")
 	}
+}
+
+// Test for pre
+func TestPreInFundTxScript(t *testing.T) {
+}
+
+//
+// FundTxOut
+//
+// Test for Amt
+func TestAmtInFundTxOut(t *testing.T) {
+}
+
+// Test for TxOut
+func TestTxOutInFundTxOut(t *testing.T) {
 }
