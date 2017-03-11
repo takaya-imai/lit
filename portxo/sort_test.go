@@ -4,38 +4,47 @@ import (
 	"testing"
 
 	"github.com/btcsuite/btcd/chaincfg/chainhash"
+	"github.com/btcsuite/btcd/wire"
+)
+
+var (
+	inU1 = PorTxo{
+		Op: wire.OutPoint{
+			Hash:  chainhash.DoubleHashH([]byte("test")),
+			Index: 3,
+		},
+		Value: 1234567890,
+		Mode:  TxoP2PKHComp,
+		Seq:   65535,
+		KeyGen: KeyGen{
+			Depth: 3,
+			Step:  [5]uint32{0x8000002C, 1, 0x80000000},
+		},
+		PkScript: []byte("1234567890123456"),
+	}
+
+	inU2 = PorTxo{
+		Op: wire.OutPoint{
+			Hash:  chainhash.DoubleHashH([]byte("test2")),
+			Index: 3,
+		},
+		Value: 5565989,
+		Mode:  TxoP2WSHComp,
+		Seq:   0,
+		KeyGen: KeyGen{
+			Depth: 1,
+			Step:  [5]uint32{0x8000002C},
+		},
+		PkScript:    []byte("00112233"),
+		PreSigStack: [][]byte{[]byte("SIGSTACK00000"), []byte(".....STACK001"), nil},
+	}
+
+	inUNil PorTxo
 )
 
 // TxoSliceByBip69
 // this makes PorTxo slice sortable by Bip69
 func TestLenInTxoSliceByBip69(t *testing.T) {
-	var inU1 PorTxo
-	inU1.Op.Hash = chainhash.DoubleHashH([]byte("test"))
-	inU1.Op.Index = 3
-	inU1.Value = 1234567890
-	inU1.Mode = TxoP2PKHComp
-	inU1.Seq = 65535
-	inU1.KeyGen.Depth = 3
-	inU1.KeyGen.Step[0] = 0x8000002C
-	inU1.KeyGen.Step[1] = 1
-	inU1.KeyGen.Step[2] = 0x80000000
-	inU1.PkScript = []byte("1234567890123456")
-
-	var inU2 PorTxo
-	inU2.Op.Hash = chainhash.DoubleHashH([]byte("test2"))
-	inU2.Op.Index = 3
-	inU2.Value = 5565989
-	inU2.Mode = TxoP2WSHComp
-	inU2.Seq = 0
-	inU2.KeyGen.Depth = 1
-	inU2.KeyGen.Step[0] = 0x8000002C
-	inU2.PkScript = []byte("00112233")
-	inU2.PreSigStack = make([][]byte, 3)
-	inU2.PreSigStack[0] = []byte("SIGSTACK00000")
-	inU2.PreSigStack[1] = []byte(".....STACK001")
-
-	var inUNil PorTxo
-
 	// test a normal situation
 	// input: TxoSliceByBip69 contains
 	//   PorTxo: inU1
@@ -66,33 +75,6 @@ func TestLenInTxoSliceByBip69(t *testing.T) {
 }
 
 func TestSwapInTxoSliceByBip69(t *testing.T) {
-	var inU1 PorTxo
-	inU1.Op.Hash = chainhash.DoubleHashH([]byte("test"))
-	inU1.Op.Index = 3
-	inU1.Value = 1234567890
-	inU1.Mode = TxoP2PKHComp
-	inU1.Seq = 65535
-	inU1.KeyGen.Depth = 3
-	inU1.KeyGen.Step[0] = 0x8000002C
-	inU1.KeyGen.Step[1] = 1
-	inU1.KeyGen.Step[2] = 0x80000000
-	inU1.PkScript = []byte("1234567890123456")
-
-	var inU2 PorTxo
-	inU2.Op.Hash = chainhash.DoubleHashH([]byte("test2"))
-	inU2.Op.Index = 3
-	inU2.Value = 5565989
-	inU2.Mode = TxoP2WSHComp
-	inU2.Seq = 0
-	inU2.KeyGen.Depth = 1
-	inU2.KeyGen.Step[0] = 0x8000002C
-	inU2.PkScript = []byte("00112233")
-	inU2.PreSigStack = make([][]byte, 3)
-	inU2.PreSigStack[0] = []byte("SIGSTACK00000")
-	inU2.PreSigStack[1] = []byte(".....STACK001")
-
-	var inUNil PorTxo
-
 	// test a normal situation
 	// input: TxoSliceByBip69 contains the follows and swap them
 	//   PorTxo: inU1
@@ -136,33 +118,6 @@ func TestSwapInTxoSliceByBip69(t *testing.T) {
 }
 
 func TestLessInTxoSliceByBip69(t *testing.T) {
-	var inU1 PorTxo
-	inU1.Op.Hash = chainhash.DoubleHashH([]byte("test"))
-	inU1.Op.Index = 3
-	inU1.Value = 1234567890
-	inU1.Mode = TxoP2PKHComp
-	inU1.Seq = 65535
-	inU1.KeyGen.Depth = 3
-	inU1.KeyGen.Step[0] = 0x8000002C
-	inU1.KeyGen.Step[1] = 1
-	inU1.KeyGen.Step[2] = 0x80000000
-	inU1.PkScript = []byte("1234567890123456")
-
-	var inU2 PorTxo
-	inU2.Op.Hash = chainhash.DoubleHashH([]byte("test2"))
-	inU2.Op.Index = 3
-	inU2.Value = 5565989
-	inU2.Mode = TxoP2WSHComp
-	inU2.Seq = 0
-	inU2.KeyGen.Depth = 1
-	inU2.KeyGen.Step[0] = 0x8000002C
-	inU2.PkScript = []byte("00112233")
-	inU2.PreSigStack = make([][]byte, 3)
-	inU2.PreSigStack[0] = []byte("SIGSTACK00000")
-	inU2.PreSigStack[1] = []byte(".....STACK001")
-
-	var inUNil PorTxo
-
 	// test a normal situation
 	// input: TxoSliceByBip69 contains
 	//   PorTxo: inU1
@@ -209,33 +164,6 @@ func TestLessInTxoSliceByBip69(t *testing.T) {
 // TxoSliceByAmt
 // this makes PorTxo slice sortable by amount
 func TestLenInTxoSliceByAmt(t *testing.T) {
-	var inU1 PorTxo
-	inU1.Op.Hash = chainhash.DoubleHashH([]byte("test"))
-	inU1.Op.Index = 3
-	inU1.Value = 1234567890
-	inU1.Mode = TxoP2PKHComp
-	inU1.Seq = 65535
-	inU1.KeyGen.Depth = 3
-	inU1.KeyGen.Step[0] = 0x8000002C
-	inU1.KeyGen.Step[1] = 1
-	inU1.KeyGen.Step[2] = 0x80000000
-	inU1.PkScript = []byte("1234567890123456")
-
-	var inU2 PorTxo
-	inU2.Op.Hash = chainhash.DoubleHashH([]byte("test2"))
-	inU2.Op.Index = 3
-	inU2.Value = 5565989
-	inU2.Mode = TxoP2WSHComp
-	inU2.Seq = 0
-	inU2.KeyGen.Depth = 1
-	inU2.KeyGen.Step[0] = 0x8000002C
-	inU2.PkScript = []byte("00112233")
-	inU2.PreSigStack = make([][]byte, 3)
-	inU2.PreSigStack[0] = []byte("SIGSTACK00000")
-	inU2.PreSigStack[1] = []byte(".....STACK001")
-
-	var inUNil PorTxo
-
 	// test a normal situation
 	// input: TxoSliceByAmt contains
 	//   PorTxo: inU1
@@ -266,33 +194,6 @@ func TestLenInTxoSliceByAmt(t *testing.T) {
 }
 
 func TestSwapInTxoSliceByAmt(t *testing.T) {
-	var inU1 PorTxo
-	inU1.Op.Hash = chainhash.DoubleHashH([]byte("test"))
-	inU1.Op.Index = 3
-	inU1.Value = 1234567890
-	inU1.Mode = TxoP2PKHComp
-	inU1.Seq = 65535
-	inU1.KeyGen.Depth = 3
-	inU1.KeyGen.Step[0] = 0x8000002C
-	inU1.KeyGen.Step[1] = 1
-	inU1.KeyGen.Step[2] = 0x80000000
-	inU1.PkScript = []byte("1234567890123456")
-
-	var inU2 PorTxo
-	inU2.Op.Hash = chainhash.DoubleHashH([]byte("test2"))
-	inU2.Op.Index = 3
-	inU2.Value = 5565989
-	inU2.Mode = TxoP2WSHComp
-	inU2.Seq = 0
-	inU2.KeyGen.Depth = 1
-	inU2.KeyGen.Step[0] = 0x8000002C
-	inU2.PkScript = []byte("00112233")
-	inU2.PreSigStack = make([][]byte, 3)
-	inU2.PreSigStack[0] = []byte("SIGSTACK00000")
-	inU2.PreSigStack[1] = []byte(".....STACK001")
-
-	var inUNil PorTxo
-
 	// test a normal situation
 	// input: TxoSliceByAmt contains the follows and swap them
 	//   PorTxo: inU1
@@ -336,33 +237,6 @@ func TestSwapInTxoSliceByAmt(t *testing.T) {
 }
 
 func TestLessInTxoSliceByAmt(t *testing.T) {
-	var inU1 PorTxo
-	inU1.Op.Hash = chainhash.DoubleHashH([]byte("test"))
-	inU1.Op.Index = 3
-	inU1.Value = 1234567890
-	inU1.Mode = TxoP2PKHComp
-	inU1.Seq = 65535
-	inU1.KeyGen.Depth = 3
-	inU1.KeyGen.Step[0] = 0x8000002C
-	inU1.KeyGen.Step[1] = 1
-	inU1.KeyGen.Step[2] = 0x80000000
-	inU1.PkScript = []byte("1234567890123456")
-
-	var inU2 PorTxo
-	inU2.Op.Hash = chainhash.DoubleHashH([]byte("test2"))
-	inU2.Op.Index = 3
-	inU2.Value = 5565989
-	inU2.Mode = TxoP2WSHComp
-	inU2.Seq = 0
-	inU2.KeyGen.Depth = 1
-	inU2.KeyGen.Step[0] = 0x8000002C
-	inU2.PkScript = []byte("00112233")
-	inU2.PreSigStack = make([][]byte, 3)
-	inU2.PreSigStack[0] = []byte("SIGSTACK00000")
-	inU2.PreSigStack[1] = []byte(".....STACK001")
-
-	var inUNil PorTxo
-
 	// test a normal situation
 	// input: TxoSliceByAmt contains
 	//   PorTxo: inU1
